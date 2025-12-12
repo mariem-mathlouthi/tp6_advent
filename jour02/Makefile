@@ -1,7 +1,7 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 -g
-TARGET = jour02
-SRC = jour02.c
+CFLAGS = -Wall -Wextra -O2
+TARGET = jour01
+SRC = jour01.c
 
 all: $(TARGET)
 
@@ -9,14 +9,9 @@ $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
 
 run: $(TARGET)
-	@echo "Execution"
-	./$(TARGET)
-
-test: $(TARGET)
-	@echo "=== Test avec l'exemple (02.example) ==="
-	./$(TARGET) 02.example
+	./$(TARGET) 01.input
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET) *.o
 
-.PHONY: all run test clean
+.PHONY: all run clean
