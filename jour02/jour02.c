@@ -59,7 +59,7 @@ Interval* parse_intervals(const char* filename, int* count) {
         }
         token = strtok(NULL, ",");
     }
-    *count = i;  
+    *count = i;
 
     return intervals;
 }
