@@ -5,15 +5,9 @@
 #include <ctype.h>
 
 typedef struct {
-    long start;
-    long end;
+    long long start;
+    long long end;
 } Interval;
-
-Interval* parse_intervals(const char* filename, int* count);
-bool is_double_exact(const char* s);
-bool is_repeated_pattern(const char* s);
-long long solve(const Interval* intervals, int count, int rule);
-void free_intervals(Interval* intervals);
 
 Interval* parse_intervals(const char* filename, int* count) {
     FILE* file = fopen(filename, "r");
@@ -24,7 +18,7 @@ Interval* parse_intervals(const char* filename, int* count) {
 
     char line[100000];
     if (!fgets(line, sizeof(line), file)) {
-        fprintf(stderr, "Fichier vide ou erreur de lecture.\n");
+        fprintf(stderr, "Erreur de lecture\n");
         fclose(file);
         return NULL;
     }
@@ -49,8 +43,8 @@ Interval* parse_intervals(const char* filename, int* count) {
         while (endptr > token && isspace(*endptr)) endptr--;
         *(endptr + 1) = '\0';
 
-        long start, end;
-        if (sscanf(token, "%ld-%ld", &start, &end) == 2) {
+        long long start, end;
+        if (sscanf(token, "%lld-%lld", &start, &end) == 2) {
             intervals[i].start = start;
             intervals[i].end = end;
             i++;
@@ -73,12 +67,11 @@ bool is_double_exact(const char* s) {
 
 bool is_repeated_pattern(const char* s) {
     int len = strlen(s);
-
     for (int motif_len = 1; motif_len <= len / 2; motif_len++) {
         if (len % motif_len != 0) continue;
 
         bool ok = true;
-        for (int i = 0; i < len; i += motif_len) {
+        for (int i = motif_len; i < len; i += motif_len) {
             if (strncmp(s, s + i, motif_len) != 0) {
                 ok = false;
                 break;
@@ -92,11 +85,11 @@ bool is_repeated_pattern(const char* s) {
 long long solve(const Interval* intervals, int count, int rule) {
     long long total = 0;
     for (int i = 0; i < count; i++) {
-        long start = intervals[i].start;
-        long end = intervals[i].end;
-        for (long n = start; n <= end; n++) {
+        long long start = intervals[i].start;
+        long long end = intervals[i].end;
+        for (long long n = start; n <= end; n++) {
             char str[32];
-            sprintf(str, "%ld", n);
+            sprintf(str, "%lld", n);
 
             bool invalid = false;
             if (rule == 1) {
@@ -111,7 +104,6 @@ long long solve(const Interval* intervals, int count, int rule) {
     }
     return total;
 }
-
 
 void free_intervals(Interval* intervals) {
     free(intervals);
@@ -129,13 +121,11 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    printf("Nombre d'intervalles trouvés : %d\n", interval_count);
-
     long long sum1 = solve(intervals, interval_count, 1);
-    printf("Somme des nombres invalides (Q1) : %lld\n", sum1);
+    printf("Somme des nombres invalides (question 1) : %lld\n", sum1);
 
     long long sum2 = solve(intervals, interval_count, 2);
-    printf("Somme des nombres invalides (Q2) : %lld\n", sum2);
+    printf("Somme des nombres invalides (question 2) : %lld\n", sum2);
 
     free_intervals(intervals);
 

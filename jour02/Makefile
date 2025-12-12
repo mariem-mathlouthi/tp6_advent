@@ -1,6 +1,5 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 -g
-
 TARGET = jour02
 SRC = jour02.c
 
@@ -10,7 +9,7 @@ $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
 
 run: $(TARGET)
-	@echo "=== Exécution avec le fichier par défaut (02.input) ==="
+	@echo "Execution"
 	./$(TARGET)
 
 test: $(TARGET)
